@@ -2,17 +2,49 @@ import pyautogui
 from PIL import ImageGrab
 import keyboard
 
-positions = [[663, 305, 664, 306], [663, 475, 664, 476], [663, 630, 664, 631], [663, 780, 664, 781], [663, 950, 664, 951],
-            [1375, 305, 1376, 306], [1375, 475, 1376, 476], [1375, 630, 1376, 631], [1375, 780, 1376, 781], [1375, 950, 1376, 951]]
+colors = {"improvements" : (238, 141, 72), "buyX" : (224, 139, 78), "managers label": (),"managers upgrades": (143, 188, 211)}
+
+improvements_positions = [[663, 305], [663, 475], [663, 630], [663, 780], [663, 950],
+            [1375, 305], [1375, 475], [1375, 630], [1375, 780], [1375, 950]]
+business_positions = [[460, 260], [460, 430],[460, 580],[460, 740],[460, 900],
+            [1150, 260], [1150, 430],[1150, 580],[1150, 740],[1150, 900]]
+buyX_position = [1844, 41]
+managers_label_position = [62, 623]
+managers_position = [830, 650]
+x_position = [1825, 100]
+
+def buyImprovements():
+    for improvemntPos in improvements_positions:
+        color = px[improvemntPos[0], improvemntPos[1]]
+        print("pos: ", improvemntPos, "color: ", color)
+        if color != colors["improvements"]:
+            continue
+        print("click on ", improvemntPos[0], improvemntPos[1], "with color ", color)
+        pyautogui.click(improvemntPos[0], improvemntPos[1], duration=0.1)
+
+def clickBusiness():
+    color = px[buyX_position[0], buyX_position[1]]
+    if color == colors["buyX"]:
+        for busionessPos in business_positions:
+            pyautogui.click(busionessPos[0], busionessPos[1])
+
+def managers():
+    color = px[managers_label_position[0], managers_label_position[1]]
+    if color == colors["managers label"]:
+        pyautogui.click(managers_label_position[0], managers_label_position[1], duration=0.1)
+        color = px[managers_position[0], managers_position[1]]
+        if color == colors["managers upgrades"]:
+            pyautogui.click(managers_position[0], managers_position[1], duration=0.1)
 
 while True:
     if keyboard.is_pressed("q"):
         print("You pressed q")
         break
-    for pos in positions:
-        px = ImageGrab.grab(bbox=(pos)).load()
-        color = px[0,0]
-        if(color == (238, 141, 72)):
-            print("click on ", pos, "with color ", color)
-            pyautogui.click(pos[0], pos[1])
-        
+    px = ImageGrab.grab().load()
+    buyImprovements()
+    clickBusiness()
+    managers()
+    #pos = pyautogui.position()
+    #print(pyautogui.position())
+    #px = ImageGrab.grab().load()
+    #print(px[pos.x, pos.y])
